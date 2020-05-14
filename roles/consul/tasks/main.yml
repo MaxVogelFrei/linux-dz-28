@@ -1,0 +1,19 @@
+---
+# Prepare host
+- name: Consul | Turn off SELinux
+  selinux:
+    state: disabled
+
+- name: Consul | Install required packages
+  yum:
+    name: unzip
+    state: present
+
+# Install consul
+- include: install.yml
+  tags:
+    - install
+
+- include: configure.yml
+  tags:
+    - config
