@@ -1,6 +1,6 @@
 ---
 - name: Consul install and configure role
-  hosts: dcs
+  hosts: consul
   gather_facts: True
   become_user: root
   become: True
@@ -9,7 +9,10 @@
     - consul
 
 - name: Patroni install and configure role
-  hosts: db
+  hosts:
+  - pg1
+  - pg2
+  - pg3
   gather_facts: True
   become_user: root
   become: True
@@ -18,7 +21,7 @@
     - patroni
 
 - name: Install and configure HAProxy
-  hosts: proxy
+  hosts: haproxy
   gather_facts: True
   become_user: root
   become: True

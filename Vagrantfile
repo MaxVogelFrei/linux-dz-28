@@ -4,7 +4,7 @@
 MACHINES = {
   :consul => {
         :box_name => "centos/7",
-        :forward => {:guest => 80, :host => 11080},
+        :forward => {:guest => 8500, :host => 18500},
         :net => [  
                    {adapter: 2, ip: '192.168.11.100', netmask: "255.255.255.0"}
                 ]
@@ -68,13 +68,17 @@ Vagrant.configure("2") do |config|
       #       python \
 	# 	telnet
       #     SHELL
-=begin
-          box.vm.provision "ansible" do |ansible|
-            ansible.verbose = "vv"
-            ansible.playbook = "provision/playbook.yml"
-            ansible.become = "true"
+
+          case boxname.to_s
+          when "haproxy"
+              box.vm.provision "ansible" do |ansible|
+                  ansible.compatibility_mode = "2.0"
+                  ansible.playbook = "site.yml"
+                  ansible.verbose = "true"
+                  ansible.become = "true"
+                  ansible.limit = "all"
+              end
           end
-=end
       end
   end
 end
