@@ -36,7 +36,16 @@ MACHINES = {
         :net => [
                    {adapter: 2, ip: '192.168.11.101', netmask: "255.255.255.0"}
                 ]
+  },
+  :provision => {
+        :box_name => "centos/7",
+        :forward => {:guest => 22, :host => 11022},
+        :net => [
+                   {adapter: 2, ip: '192.168.11.102', netmask: "255.255.255.0"}
+                ]
   }
+
+
 }
 
 Vagrant.configure("2") do |config|
@@ -70,14 +79,14 @@ Vagrant.configure("2") do |config|
       #     SHELL
 
           case boxname.to_s
-          when "haproxy"
-              box.vm.provision "ansible" do |ansible|
-                  ansible.compatibility_mode = "2.0"
-                  ansible.playbook = "site.yml"
-                  ansible.verbose = "true"
-                  ansible.become = "true"
-                  ansible.limit = "all"
-              end
+          when "provision"
+              box.vm.provision "shell", run: "always", inline: <<-SHELL
+                yum install epel-release -y
+                yum install ansible -y
+                cp -r /vagrant/* /root/
+                cd /root
+                ansible-playbook site.yml
+                SHELL
           end
       end
   end
