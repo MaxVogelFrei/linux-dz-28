@@ -68,15 +68,11 @@ Vagrant.configure("2") do |config|
             #vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 0, '--device', 1, '--type', 'hdd', '--medium', second_disk]
           end
 
-      #     box.vm.provision "shell", inline: <<-SHELL
-      #       mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
-      #       sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-      #       systemctl restart sshd
-      #       apt update -y && apt install -y \
-      #       vim \
-      #       python \
-	# 	telnet
-      #     SHELL
+         box.vm.provision "shell", inline: <<-SHELL
+             mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+             sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+             systemctl restart sshd
+         SHELL
 
           case boxname.to_s
           when "provision"
